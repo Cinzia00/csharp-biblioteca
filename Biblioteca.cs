@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection.Metadata;
+using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,30 +13,65 @@ namespace csharp_biblioteca
 {
     public class Biblioteca
     {
-        List<Documento> documenti = new List<Documento> { };
-        List<Utente> utenti = new List<Utente> { };
-        List<Prestito> prestiti = new List<Prestito> { };
+        public List<Documento> Documents { get; set; } = new List<Documento>();
+        public List<Utente> Users { get; set; }  = new List<Utente>();
+        public List<Prestito> Loans { get; set; } = new List<Prestito>();
 
 
         public void AddDocument(Documento document)
         {
-           documenti.Add(document);
+            Documents.Add(document);
         }
 
         public void AddUser(Utente user)
         {
-            utenti.Add(user);
-
+            Users.Add(user);
         }
-        public void AddLoan(Prestito loan) 
+
+        public void AddLoan(Utente user, Documento document) 
         {
-            prestiti.Add(loan);
-
+            Prestito prestito = new Prestito(user, document);
+            Loans.Add(prestito);
         }
 
-        internal void AddDocument(Documento documento, object libro4)
+        public void PrintDocument()
         {
-            throw new NotImplementedException();
+            foreach (Documento documento in this.Documents)
+            {
+                Console.WriteLine($"Titolo: {documento.Title}");
+                Console.WriteLine($"Anno: {documento.Year}");
+                Console.WriteLine($"Settore: {documento.Sector}");
+                Console.WriteLine($"Autore: {documento.Author}");
+                Console.WriteLine("-----------");
+            }
         }
+
+        public void PrintUser()
+        {
+            foreach (Utente user in this.Users)
+            {
+                Console.WriteLine($"Cognome: {user.LastName}");
+                Console.WriteLine($"Nome: {user.Name}");
+                Console.WriteLine($"Email: {user.Email}");
+                Console.WriteLine($"Telefono: {user.Phone}");
+                Console.WriteLine("-----------");
+            }
+        }
+
+        public void PrintLoan()
+        {
+            foreach (Prestito loan in this.Loans)
+            {
+                Console.WriteLine($"Cognome e Nome: {loan.User.fullName()}");
+                Console.WriteLine($"Documneto in prestito: {loan.Document.Title}");
+                Console.WriteLine($"Data inizio prestito: {loan.StartDate}");
+                Console.WriteLine($"Data fine prestito: {loan.DueDate}");
+                Console.WriteLine("-----------");
+            }
+        }
+
+
+
+
     }
 }
